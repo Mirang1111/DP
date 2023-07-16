@@ -1,7 +1,16 @@
 /*
+recursion tc -> a bit less than o(2 power n)
+sc -> 
+dp[i] = max money robbed till index i
+memo tc -> o(N) 
+sc -> o(N) -> recursive stack space + o(N) -> space of dp
 
+tab tc -> o(N)
+sc -> o(N)
+
+space optimization tc -> o(N)
+sc -> o(1)
 */
-
 class Solution {
 public:   
     int solve(vector<int> &nums , int index , vector<int> &dp){

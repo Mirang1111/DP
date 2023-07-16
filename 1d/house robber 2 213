@@ -1,1 +1,6 @@
+https://leetcode.com/problems/house-robber-ii/
+
+// the only difference -> first and last element are adjacent since we are in a circle
+
+// ans = max(solve(0,n-2) , solve(1,n-1)) -> max(leave out last , leave out first)
 

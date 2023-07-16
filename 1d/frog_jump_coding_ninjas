@@ -1,1 +1,52 @@
+/*
+recursion tc ->
+sc ->
+dp[i] = minimum total energy required to reach the ith step
+memo tc -> o(N) 
+sc -> o(N) -> recursive + o(N) -> space of dp
 
+tab tc -> o(N)
+sc -> o(N)
+
+space optimization tc -> o(N)
+sc -> o(1)
+*/
+#include <bits/stdc++.h> 
+int memo(int index , vector<int> &heights , vector<int> &dp){
+    if(index==0){
+        return 0;
+    }
+    if(index==1){
+        return abs(heights[index]-heights[index-1]);
+    }
+    if(dp[index]!=-1) return dp[index];
+    return dp[index] = min(abs(heights[index]-heights[index-1]) + memo(index-1,heights,dp) , abs(heights[index]-heights[index-2]) + 
+    memo(index-2,heights,dp));   
+}
+int frogJump(int n, vector<int> &heights)
+{
+    //vector<int> dp(n+1,-1);
+    //return memo(n-1,heights,dp);
+    vector<int> dp(n+1,0);
+    // return from the base cases
+    if(heights.size()==1) return 0;
+    else if(heights.size()==2) return abs(heights[1]-heights[0]);
+    // 0th index means size of array is 1 hence 0
+    dp[0] = 0;
+    // 1th index means size of array is 2 
+    dp[1] = abs(heights[1]-heights[0]);
+    for(int i = 2 ; i < heights.size() ; i++){
+        dp[i] = min(abs(heights[i]-heights[i-1]) + dp[i-1] , abs(heights[i]-heights[i-2]) + dp[i-2]);
+    }
+   // return dp[heights.size()-1];
+   // previous are basically the base cases 
+   int prev2 = 0;
+   int prev1 =  abs(heights[1]-heights[0]);
+   int curr;
+   for(int i = 2 ; i < heights.size() ; i++){
+       curr = min(abs(heights[i]-heights[i-1]) + prev1 , abs(heights[i]-heights[i-2]) + prev2);
+       prev2 = prev1;
+       prev1 = curr;
+   }
+   return curr;
+}

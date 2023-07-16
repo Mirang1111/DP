@@ -1,0 +1,41 @@
+/*
+
+*/
+
+class Solution {
+public:   
+    int solve(vector<int> &nums , int index , vector<int> &dp){
+        
+        if(index==0) return nums[index];
+        if(index==1) return max(nums[index],nums[index-1]);
+        if(dp[index]!=-1) return dp[index];
+        // cannot rob adjacent house 
+        int rob_house = nums[index] + solve(nums,index-2,dp);
+        int dont_rob_house = solve(nums,index-1,dp);
+        return dp[index] =  max(rob_house , dont_rob_house);
+    }
+    
+    int rob(vector<int>& nums) {
+        //vector<int> dp(nums.size()+1,-1);
+        //return solve(nums,nums.size()-1,dp);
+        vector<int> dp(nums.size()+1,0);
+        if(nums.size()==1) return nums[0];
+        else if(nums.size()==2) return max(nums[0],nums[1]);
+        dp[0] = nums[0];
+        dp[1] = max(nums[0],nums[1]);
+        for(int i = 2 ; i < nums.size() ; i++){
+            dp[i] = max(nums[i] + dp[i-2] , dp[i-1]);
+        }
+      //  return dp[nums.size()-1];
+        
+        int prev2 = nums[0];
+        int prev1 = max(nums[0],nums[1]);
+        int curr;
+        for(int i = 2 ; i < nums.size() ; i++){
+            curr = max(nums[i] + prev2 , prev1);
+            prev2 = prev1;
+            prev1 = curr;
+        }
+        return curr;
+    }
+};

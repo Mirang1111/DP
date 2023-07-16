@@ -1,5 +1,7 @@
 /* hint -> count all possible ways -> think of dp always
 dp[i] = no of ways to reach from 0 to nth index
+smaller sub problem is at the left side so direction of movement left -> right
+, travel and solve
 */
 /* tc and sc
 same as fibonacci sequence

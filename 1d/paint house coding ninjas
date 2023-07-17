@@ -2,7 +2,7 @@ https://www.codingninjas.com/studio/problems/paint-house_1460385?leftPanelTab=0
 #include<bits/stdc++.h>
 /*
      dp[i][0] -> min amount to colour the ith house with green colour 
-	 such that no two green colour houses are adjacent
+	 such that no two houses are adjacent
  */
 int minCost(vector<vector<int>> &cost)
 {

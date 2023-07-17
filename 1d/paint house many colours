@@ -1,0 +1,22 @@
+int main()
+{
+    vector<vector<int>> dp(arr.size() , vector<int> (arr[0].size() , 0));
+    for(int j = 0 ; j < arr[0].size() ; j++){
+        dp[0][j] = 0;
+    }
+    
+    for(int i = 1 ; i < dp.size() ; i++){
+        for(int j = 0 ; j < dp[0].size() ; j++{
+            int mine = INT_MAX;
+            for(int k = 0 ; k < dp[0].size() ; k++){
+                if(j!=k){
+                    if(mine > dp[i-1][k]) mine = dp[i-1][k];
+                }
+            }
+            dp[i][j] = arr[i][j] + mine;
+        }
+    }
+    
+    // return min of last row 
+}
+

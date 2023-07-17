@@ -1,0 +1,39 @@
+class Solution{
+public:
+	 #define ll long long
+	 ll mod = 1e9+7;
+	 ll solve(int index , int n , vector<int> &dp){
+	     if(index==n) return 2;
+	     if(index > n) return 1;
+	     if(dp[index]!=-1) return dp[index];
+	     // if I take zero next index main zero ya one dono aa sakte hain
+	     ll take0 = solve(index+1,n,dp)%mod;
+	     // if I take one next index main only 0 can come and 1 cannot come so go to index + 2
+	     ll take1 = solve(index+2,n,dp)%mod;
+	     
+	     return dp[index] =  (take0%mod + take1%mod)%mod;
+	 }
+	 
+	ll countStrings(int n) {
+	    //vector<int> dp(n+1,-1);
+	   // return solve(1,n,dp);
+	  // vector<int> dp(n+1,0);
+	  // dp[n] = 2;
+	/*   for(int i = n-1 ; i >=1 ; i--){
+	       if(i==n-1) dp[i] = (dp[i+1]%mod + 1%mod)%mod;
+	       else dp[i] = (dp[i+1]%mod + dp[i+2]%mod)%mod;
+	   } */
+	 //  return dp[1]%mod;
+	   
+	   int prev1 = 2 , prev2 = 1;
+	   // n = 1 , curr = 2;
+	   int curr = prev1;
+	      for(int i = n-1 ; i >=1 ; i--){
+	       if(i==n-1) curr = (prev1%mod + prev2%mod)%mod;
+	       else curr = (prev1%mod + prev2%mod)%mod;
+	       prev2 = prev1;
+	       prev1 = curr;
+	   }
+	   return curr%mod;
+	}
+};

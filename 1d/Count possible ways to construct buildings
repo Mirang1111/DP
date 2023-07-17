@@ -1,0 +1,20 @@
+https://practice.geeksforgeeks.org/problems/count-possible-ways-to-construct-buildings5007/1
+// same as count binary strings . imagine building as 1 and spaces as 0. no two buildings can be together
+public:
+	#define ll long long
+	 ll mod = 1e9+7;
+	int TotalWays(int n)
+	{
+	     int prev1 = 2 , prev2 = 1;
+	   // n = 1 , curr = 2;
+	   int curr = prev1;
+	      for(int i = n-1 ; i >=1 ; i--){
+	       if(i==n-1) curr = (prev1%mod + prev2%mod)%mod;
+	       else curr = (prev1%mod + prev2%mod)%mod;
+	       prev2 = prev1;
+	       prev1 = curr;
+	   }
+// since buildings are present on both the sides
+	   int ans =  (curr%mod * curr%mod)%mod;
+	   return ans;
+	}

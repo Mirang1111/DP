@@ -1,1 +1,46 @@
+/*
+ tc -> 2 power (1 + 2 + n+1 elements)
+ sc -> length of the rows o(n)
+ 
+ memo -> tc ->  n*n (not exactly) -> basically states of a triangle
+ sc -> o(N) -> stack space + space for dp vector
+ 
+ tabu -> tc -> o(n*n) -> slightly lesser than that
+ sc -> space for dp vector
+ 
+ space o -> tc -> o(n*n) ->  slightly lesser than that
+ sc -> size of the space optimization array
+*/
 
+class Solution {
+public:
+ 
+    int solve(int i , int j , vector<vector<int>> &t , vector<vector<int>> &dp){
+        // no need to think for base case of j as it will never go out of range
+        if(i==t.size()-1) return t[i][j];
+        if(dp[i][j]!=-1) return dp[i][j];
+        return dp[i][j] =  min(t[i][j] + solve(i+1,j,t,dp) , t[i][j] + solve(i+1,j+1,t,dp));   
+    }
+    int minimumTotal(vector<vector<int>>& t) {
+         vector<vector<int>> dp(t.size() , vector<int> (t.size() , 0));
+    /*    for(int j = 0 ; j < t.size() ; j++) dp[t.size()-1][j] = t[t.size()-1][j];
+        // tabulation is opposite of recursion
+        for(int i = t.size()-2 ; i >= 0 ; i--){
+            // try to think of the possible states of j for every possible state of i
+            // again no need to think of the base case since j can never be out of index
+            // and base case for i has already been handled
+            for(int j = i ; j >= 0 ; j--){
+                dp[i][j] = min(t[i][j] + dp[i+1][j] , t[i][j] + dp[i+1][j+1]);
+            }
+        }
+        return dp[0][0]; */
+        vector<int> next_row(t.size() , 0);
+        for(int j = 0 ; j < t.size() ; j++) next_row[j] = t[t.size()-1][j];
+            for(int i = t.size()-2 ; i >= 0 ; i--){
+                vector<int> curr_row(t.size(),0);
+            for(int j = i ; j >= 0 ; j--) curr_row[j] = min(t[i][j] + next_row[j] , t[i][j] + next_row[j+1]);
+                next_row = curr_row;
+        }
+        return next_row[0];
+    }
+};

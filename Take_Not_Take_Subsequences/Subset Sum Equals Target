@@ -1,3 +1,5 @@
+https://practice.geeksforgeeks.org/problems/subset-sum-problem-1611555638/1
+
 /*
     brute -> generate all subsequences and check for the answer
     recursion -> tc -> 2 power n -> for each element -> take / not take

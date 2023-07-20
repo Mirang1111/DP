@@ -1,1 +1,82 @@
+/*
+    brute -> generate all subsequences and check for the answer
+    recursion -> tc -> 2 power n -> for each element -> take / not take
+    sc -> o(N) -> auxiliary stack space
+    
+    dp[i][target] -> in the entire array till the index i , does there exists any target
+    
+    memo tc -> o(N*target)
+    sc -> o(N*target) + o(N)
+    
+    tab tc -> o(N*target)
+    sc -> o(N*target)
+    
+    space o tc ->o(N*target)
+    sc ->  o(target)
+*/
+
+class Solution{   
+public:
+
+    bool solve(int index , int sum , vector<int> &arr , vector<vector<int>> &dp){
+        
+        if(sum==0) return true;
+        if(index==0) return arr[index]==sum;
+        if(dp[index][sum]!=-1) return dp[index][sum];
+        bool take = false;
+        bool ntake = false;
+        // only take when it is possible to take
+        if(arr[index] <= sum) take = solve(index-1,sum-arr[index],arr,dp);
+        // we can always not take and move forward
+        ntake = solve(index-1,sum,arr,dp);
+        return dp[index][sum] =  take or ntake;
+    }
+    
+    bool isSubsetSum(vector<int>arr, int sum){
+        //vector<vector<int>> dp(arr.size() , vector<int> (sum+1,-1));
+        //return solve(arr.size()-1,sum,arr,dp);
+        
+        vector<vector<int>> dp(arr.size() , vector<int> (sum+1,false));
+        // sum = 0 -> always true
+        for(int i = 0 ; i < arr.size() ; i++) dp[i][0] = true;
+      
+        for(int target = 1 ; target <= sum ; target++){
+              // if index is zero , then arr[0] should be sum (target) -> hence true
+              // dp[0][arr[0]] = true else false in every other case
+            if(target==arr[0]) dp[0][arr[0]] = true;
+            else dp[0][target] = false;
+        }
+     /*   for(int i = 1 ; i < arr.size() ; i++){
+            for(int target = 1 ; target <= sum ; target++){
+                bool take = false;
+                if(target >= arr[i]){
+                    take = dp[i-1][target-arr[i]];
+                }
+                bool ntake = dp[i-1][target];
+                dp[i][target] = take or ntake;
+            }
+        }
+        return dp[arr.size()-1][sum]; */
+        vector<int> prev_row(sum+1,false);
+        prev_row[0] = true;
+        for(int target = 1 ; target <= sum ; target++){
+            if(target==arr[0]) prev_row[arr[0]] = true;
+            else prev_row[target] = false;
+        }
+             for(int i = 1 ; i < arr.size() ; i++){
+                 vector<int> curr_row(sum+1,false);
+            for(int target = 1 ; target <= sum ; target++){
+                bool take = false;
+                if(target >= arr[i]) take = prev_row[target-arr[i]];
+                bool ntake = prev_row[target];
+                curr_row[target] = take or ntake;
+            }
+            prev_row = curr_row;
+        }
+        return prev_row[sum];
+        
+        
+        
+    }
+};
 

@@ -40,7 +40,7 @@ class Solution{
 	{
         // Your code goes here
         vector<vector<int>> dp(n,vector<int>(sum+1,-1));
-        sort(arr, arr + n, greater<int>());
+        sort(arr, arr + n, greater<int>()); // this is the most imp step to do
         return solve(arr,n-1,sum,dp);
 	}
 	  

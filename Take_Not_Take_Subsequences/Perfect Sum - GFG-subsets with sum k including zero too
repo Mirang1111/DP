@@ -45,3 +45,4 @@ class Solution{
 	}
 	  
 };
+// or if i dont want to sort the array  , i can handle the base conditions too as done in partitions with given difference

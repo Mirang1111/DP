@@ -1,1 +1,88 @@
+https://practice.geeksforgeeks.org/problems/partitions-with-given-difference/1
 
+
+class Solution {
+  public:
+  int mod = 1e9+7;
+     int  subsetsum(int index , int sum , vector<int> &arr ,  vector<vector<int>> &dp){
+    //if(sum==0) return 1; // do not use this because zero is present in the array and we have to go deep in the tree
+     if(index==0){
+         if(sum==0 and arr[index]==0) return 2;
+         else if(sum==0 or arr[index]==sum) return 1;
+         else return 0;
+     }
+        if(dp[index][sum]!=-1) return dp[index][sum];
+        int take = 0;
+        int ntake = 0;
+        // only take when it is possible to take
+        if(arr[index] <= sum) take = subsetsum(index-1,sum-arr[index],arr,dp);
+        // we can always not take and move forward
+        ntake = subsetsum(index-1,sum,arr,dp);
+        return dp[index][sum] =  (take%mod + ntake%mod)%mod ;
+    }
+  
+    int countPartitions(int n, int d, vector<int>& arr) {
+        // s1+s2 = ts
+        // s1-s2 = d
+        // s1 = s2 + d
+        // s2 = ( ts - d ) / 2;
+        // count the total number of subsets with sum as s2
+        // two imp edge cases -> since all numbers are >= 0 , ts - d cannot be negative
+        // as it is the sum of the subset , ts-d has to be even since we are dividing by two
+        
+        int sum = 0;
+        for(auto it : arr) sum+=it;
+        int check = sum-d;
+        // checked for negative case
+        if(check < 0) return 0;
+        // check for odd case
+        else if(check%2!=0) return 0;
+        else {
+          //  vector<vector<int>> dp(n , vector<int> (check/2 + 1 , -1));
+         //   return subsetsum(arr.size()-1,check/2,arr,dp)%mod ;
+       /*   vector<vector<int>> dp(n , vector<int> (check/2 + 1 , 0));
+          if(arr[0]==0) dp[0][0] = 2; // either take or not take
+          else dp[0][0] = 1; // at index zero sum is zero but number is not zero so simply do not take the number
+          
+          for(int target = 1 ; target <= check/2 ; target++){
+              if(arr[0]==target) dp[0][target] = 1;
+          }
+          
+              for(int i = 1 ; i < arr.size() ; i++){
+                  // always start target from zero
+            for(int target = 0 ; target <= check/2 ; target++){
+                int take = 0;
+                if(target >= arr[i]){
+                    take = dp[i-1][target-arr[i]];
+                }
+                int ntake = dp[i-1][target];
+                dp[i][target] = (take%mod + ntake%mod)%mod;
+            }
+        }
+        return dp[arr.size()-1][check/2]%mod; */
+        
+        //     vector<vector<int>> dp(n , vector<int> (check/2 + 1 , 0));
+             vector<int> prev_row((check/2) +1,0);
+             
+             if(arr[0]==0) prev_row[0] = 2; 
+          else prev_row[0] = 1;
+             
+        for(int target = 1 ; target <= check/2 ; target++){
+            if(target==arr[0]) prev_row[arr[0]] = 1;
+            else prev_row[target] = 0;
+        }
+             for(int i = 1 ; i < arr.size() ; i++){
+                 vector<int> curr_row((check/2)  +1,0);
+            for(int target = 0 ; target <= check/2 ; target++){
+                int take = 0;
+                if(target >= arr[i]) take = prev_row[target-arr[i]];
+                int ntake = prev_row[target];
+                curr_row[target] = (take%mod + ntake%mod)%mod;
+            }
+            prev_row = curr_row;
+        }
+        return prev_row[check/2]%mod;
+        }
+        return 0;
+    }
+};

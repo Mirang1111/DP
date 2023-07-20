@@ -1,1 +1,72 @@
 https://www.codingninjas.com/studio/problems/number-of-subsets_3952532?source=youtube&campaign=striver_dp_videos&utm_source=youtube&utm_medium=affiliate&utm_campaign=striver_dp_videos
+
+
+/*
+   same as subset sum equals target
+*/
+
+int  mod = 1e9+7;
+int solve(int index , int sum , vector<int> &arr , vector<vector<int>> &dp){
+        
+        if(sum==0) return 1;
+        if(index==0) return arr[index]==sum ? 1:0;
+        if(dp[index][sum]!=-1) return dp[index][sum];
+        int take = 0;
+        int ntake = 0;
+        // only take when it is possible to take
+        if(arr[index] <= sum) take = solve(index-1,sum-arr[index],arr,dp)%mod;
+        // we can always not take and move forward
+        ntake = solve(index-1,sum,arr,dp)%mod;
+        return dp[index][sum] =  (take%mod + ntake%mod)%mod;
+    }
+
+int findWays(vector<int>& arr, int k)
+{
+    int sum = k;
+	//vector<vector<int>> dp(arr.size() , vector<int> (k+1,-1));
+    //return solve(arr.size()-1,k,arr,dp)%mod;
+
+     /*   vector<vector<int>> dp(arr.size() , vector<int> (sum+1,0));
+        // sum = 0 -> always 1
+        for(int i = 0 ; i < arr.size() ; i++) dp[i][0] = 1;
+      
+        for(int target = 1 ; target <= sum ; target++){
+              // if index is zero , then arr[0] should be sum (target) -> hence 1
+              // dp[0][arr[0]] = 1 else 0 in every other case
+            if(target==arr[0]) dp[0][arr[0]] = 1;
+            else dp[0][target] = 0;
+        }
+        for(int i = 1 ; i < arr.size() ; i++){
+            for(int target = 1 ; target <= sum ; target++){
+                int take = 0;
+                if(target >= arr[i]){
+                    take = dp[i-1][target-arr[i]]%mod;
+                }
+                int ntake = dp[i-1][target]%mod;
+                dp[i][target] = (take%mod + ntake%mod);
+            }
+        }
+        return dp[arr.size()-1][sum]%mod; */
+        // imp to make curr here only and not inside the loop
+        vector<int> prev_row(sum+1,0) , curr_row(sum+1,0);
+        prev_row[0] = curr_row[0] = 1;
+        for(int target = 1 ; target <= sum ; target++){
+            if(target==arr[0]) prev_row[arr[0]] = 1;
+            else prev_row[target] = 0;
+        }
+             for(int i = 1 ; i < arr.size() ; i++){
+               //  vector<int> curr_row(sum+1,0);
+            for(int target = 1 ; target <= sum ; target++){
+                int take = 0;
+                if(target >= arr[i]) take = prev_row[target-arr[i]]%mod;
+                int ntake = prev_row[target]%mod;
+                curr_row[target] =(take%mod + ntake%mod)%mod;
+            }
+            prev_row = curr_row;
+        }
+        return prev_row[sum]%mod;
+
+
+
+
+}

@@ -1,1 +1,76 @@
+/* 
+recurs
+      tc -> 2 to the power n 
+      sc -> o(n)
+memo 
+      tc -> n*w
+      sc ->  n*w + o(n)
+tabu 
+       tc -> n*w
+       sc ->  n*w
+space op
+       tc -> n*w
+       sc ->  w
+*/
 
+class Solution
+{
+    public:
+    
+    int solve(vector<int> &w , vector<int> &v , int W , int index , vector<vector<int>> &dp){
+        if(W==0) return 0;
+        if(index==0){
+            if(w[index]<=W) return v[index];
+            else return 0;
+        }
+        if(dp[index][W]!=-1) return dp[index][W];
+        int nt = solve(w,v,W,index-1,dp);
+        int take = 0;
+        if(W >= w[index]) take = v[index] + solve(w,v,W-w[index],index-1,dp);
+        return dp[index][W] =  max(take,nt);
+    }
+    int knapSack(int W, int wt[], int val[], int n) 
+    { 
+        vector<int> w(wt , wt + n);
+        vector<int> v(val , val + n);
+     //  vector<vector<int>> dp(n , vector<int> (W+1,-1));
+   //    return solve(w,v,W,n-1,dp);
+   /*  vector<vector<int>> dp(n , vector<int> (W+1,0));
+      for(int i = 0 ; i < n ; i++) dp[i][0] = 0;
+      for(int ww = 0 ; ww <= W ; ww++){
+          if(wt[0]<=ww) dp[0][ww] = v[0];
+          else dp[0][ww] = 0;
+      }
+      for(int i = 1 ; i < n ; i++){
+        for(int ww = 0 ; ww <= W ; ww++){
+            int nt = dp[i-1][ww];
+            int t = 0;
+            if(ww >= wt[i]) t = v[i] + dp[i-1][ww-wt[i]];
+            dp[i][ww] = max(nt,t);
+        }
+    }
+    return dp[n-1][W]; */
+    
+ vector<int> prev(W+1,0);
+        for(int ww = 0 ; ww <= W ; ww++)
+        {
+            if(ww>=wt[0])prev[ww] = val[0];
+        }
+        
+        for(int i = 1 ; i < n ; i++)
+        {
+            vector<int> curr(W+1,0);
+            for(int w = 0 ; w <= W ; w++)
+            {
+                int nt = prev[w];
+                int t = 0;
+                if(w >= wt[i])
+                {
+                    t = val[i] + prev[w-wt[i]];
+                }
+                  curr[w] = max(t,nt);
+            }
+            prev = curr;
+        }
+        return prev[W];
+    }

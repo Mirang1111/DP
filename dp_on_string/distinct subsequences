@@ -32,7 +32,7 @@ public:
         vector<ll> prev(m+1,0);
         vector<ll> curr(m+1,0);
         prev[0] = 1;
-        curr[0] = 1;
+        curr[0] = 1; // this line is very imp
         for(ll j = 1 ; j <= m ; j++) prev[j] = 0;
         for(ll i = 0 ; i <= n ; i++) prev[0] = 1;
         
